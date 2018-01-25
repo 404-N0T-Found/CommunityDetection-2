@@ -20,9 +20,13 @@ def initialize():
 def arrangeNodesOrder():
     return
 
+def labelPropagate():
+    return
+
 if __name__ == '__main__':
     print('Hi')
     loadData()
     initialize()
     t=1
     arrangeNodesOrder()
+    labelPropagate()
