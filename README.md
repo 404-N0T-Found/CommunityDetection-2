@@ -1,0 +1,2 @@
+# CommunityDetection
+Implementation of LabelPropagation
