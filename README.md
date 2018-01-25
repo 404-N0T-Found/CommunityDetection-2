@@ -1,2 +1,2 @@
 # CommunityDetection
-Implementation of LabelPropagation
+Implementation of LabelPropagation paper for community Detection in Graph.
