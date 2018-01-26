@@ -1,9 +1,10 @@
 # https://arxiv.org/pdf/0709.2938.pdf
 
-from collections import Counter
 from random import shuffle
 
 
+# This function Read File and Add nodes to dictinary(distinct)
+#
 def initialize():
     rndOrder = []
     graph = []
@@ -18,23 +19,40 @@ def initialize():
         rndOrder.append([item[0], [lbl]])
         lbl += 1
     shuffle(rndOrder)
-    return rndOrder,graph
+    return rndOrder, graph
 
 
-def arrangeNodesOrder():
+# node i in the whole graph
+def findNeighbours(node, graph):
+    lst = []
+    for item in graph:
+        if item[0] == node:
+            lst.append(item)
+    return lst
+
+
+def getNeighboursLabels(lstN, nodesLabels):
     return
 
 
-def labelPropagate():
+def getDominantLabel(lst):
+    lbls = [lst[i] for i in range(len(lst))]
+    return lbls
+
+
+def labelPropagate(nodesorder, graph):
+    i = 0
+    while (1):
+        for item in nodesorder:
+            neighbors = findNeighbours(item[0])
+            neig_lbls = getNeighboursLabels(neighbors, nodesorder)
+        nodesorder = shuffle(nodesorder)
     return
 
 
 if __name__ == '__main__':
     # step1
-    graph = initialize()
-
+    rndOrder, graph = initialize()
     t = 1
 
-    arrangeNodesOrder()
-
-    labelPropagate()
+    labelPropagate(rndOrder, graph)
