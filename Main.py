@@ -1,6 +1,7 @@
 # https://arxiv.org/pdf/0709.2938.pdf
-
+from collections import Counter
 from random import shuffle
+from random import randint
 
 
 # This function Read File and Add nodes to dictinary(distinct)
@@ -31,8 +32,24 @@ def findNeighbours(node, graph):
     return lst
 
 
-def getNeighboursLabels(lstN, nodesLabels):
-    return
+def getNeighboursLabels(lstNei, nodesLabels):
+    lstlbls = []
+    for item in nodesLabels:
+        for neig in lstNei:
+            if neig[1] == item[0]:
+                lstlbls.append(item[1][-1])
+
+    return lstlbls
+
+
+def getNodeLabel(labels):
+    countlbls = Counter(labels)
+    canSetedlbl = [countlbls[i] for i in countlbls if countlbls[i] > 1]
+    if (len(canSetedlbl) > 0):
+        rnd = randint(0, len(canSetedlbl) - 1)
+        return canSetedlbl[rnd]
+    else:
+        return
 
 
 def getDominantLabel(lst):
