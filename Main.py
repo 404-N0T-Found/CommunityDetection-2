@@ -3,6 +3,8 @@ from collections import Counter
 from random import shuffle
 from random import randint
 
+graph = []
+
 
 # This function Read File and Add nodes to dictinary(distinct)
 #
@@ -23,47 +25,78 @@ def initialize():
     return rndOrder, graph
 
 
+def checkResult(node):
+    for item in graph:
+        if item[0] == node:
+            print(item)
+        elif item[1] == node:
+            print(item)
+
+
 # node i in the whole graph
-def findNeighbours(node, graph):
+def findNeighbours(node):
     lst = []
     for item in graph:
         if item[0] == node:
-            lst.append(item)
-    return lst
+            lst.append(item[1])
+        elif item[1] == node:
+            lst.append(item[0])
+    myset = set(lst)
+    return list(myset)
 
 
 def getNeighboursLabels(lstNei, nodesLabels):
     lstlbls = []
     for item in nodesLabels:
         for neig in lstNei:
-            if neig[1] == item[0]:
+            if neig == item[0]:
                 lstlbls.append(item[1][-1])
-
     return lstlbls
 
 
+def checkHasMaximumLabel(neig, lbls, nodelbl):
+    cnt = lbls.count(nodelbl)
+    if (cnt > (len(neig) / 2)):
+        return True
+    return False
+
+
 def getNodeLabel(labels):
+    if len(labels) == 0:
+        return -1
     countlbls = Counter(labels)
     canSetedlbl = [countlbls[i] for i in countlbls if countlbls[i] > 1]
-    if (len(canSetedlbl) > 0):
+    if (len(canSetedlbl) > 1):
         rnd = randint(0, len(canSetedlbl) - 1)
         return canSetedlbl[rnd]
+    elif len(canSetedlbl) == 1:
+        return canSetedlbl[0]
     else:
-        return
+        rnd = randint(0, len(labels) - 1)
+        return labels[rnd]
 
 
-def getDominantLabel(lst):
-    lbls = [lst[i] for i in range(len(lst))]
-    return lbls
+def labelPropagate(nodesorder):
 
-
-def labelPropagate(nodesorder, graph):
-    i = 0
     while (1):
-        for item in nodesorder:
-            neighbors = findNeighbours(item[0])
+        stopCount = 0
+        for i in range(len(nodesorder)):
+            neighbors = findNeighbours(nodesorder[i][0])
             neig_lbls = getNeighboursLabels(neighbors, nodesorder)
-        nodesorder = shuffle(nodesorder)
+            nodelbl = getNodeLabel(neig_lbls)
+            if checkHasMaximumLabel(neighbors, neig_lbls, nodelbl) == True:
+                stopCount += 1
+
+            if nodelbl != -1:
+                nodesorder[i][1].append(nodelbl)
+            else:
+                nodesorder[i][1].append(nodesorder[i][1][-1])
+            print(nodesorder[i])
+        if stopCount == len(nodesorder):
+            break
+        print(nodesorder)
+        shuffle(nodesorder)
+        print(nodesorder)
     return
 
 
@@ -72,4 +105,4 @@ if __name__ == '__main__':
     rndOrder, graph = initialize()
     t = 1
 
-    labelPropagate(rndOrder, graph)
+    labelPropagate(rndOrder)
