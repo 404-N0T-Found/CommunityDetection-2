@@ -54,49 +54,77 @@ def getNeighboursLabels(lstNei, nodesLabels):
     return lstlbls
 
 
-def checkHasMaximumLabel(neig, lbls, nodelbl):
-    cnt = lbls.count(nodelbl)
-    if (cnt+1 > len(lbls)-cnt-1):
+def checkHasMaximumLabel(lbls, nodelbl):
+    myset = set(lbls)
+    mylst = [lbls.count(i) for i in myset]
+    myset = list(myset)
+    m = lbls.count(nodelbl)
+    lbl = [myset[i] for i, j in enumerate(mylst) if j <= m]
+
+    if len(lbl) == len(myset):
         return True
     return False
 
 
 def getNodeLabel(labels):
-    if len(labels) == 0:
-        return -1
-    countlbls = Counter(labels)
-    canSetedlbl = [countlbls[i] for i in countlbls if countlbls[i] > 1]
-    if (len(canSetedlbl) > 1):
-        rnd = randint(0, len(canSetedlbl) - 1)
-        return canSetedlbl[rnd]
-    elif len(canSetedlbl) == 1:
-        return canSetedlbl[0]
-    else:
-        rnd = randint(0, len(labels) - 1)
-        return labels[rnd]
+    # if len(labels) == 0:
+    #     return -1
+    myset = set(labels)
+    mylst = [labels.count(i) for i in myset]
+    myset = list(myset)
+    m = max(mylst)
+    lbl = [myset[i] for i, j in enumerate(mylst) if j == m]
+
+    return lbl[randint(0, len(lbl) - 1)]
+
+
+    # countlbls = Counter(labels)
+    # canSetedlbl = [countlbls[i] for i in countlbls if countlbls[i] > 1]
+    #
+    # if (len(canSetedlbl) > 1):
+    #     rnd = randint(0, len(canSetedlbl) - 1)
+    #     return canSetedlbl[rnd]
+    # elif len(canSetedlbl) == 1:
+    #     return canSetedlbl[0]
+    # else:
+    #     rnd = randint(0, len(labels) - 1)
+    #     return labels[rnd]
+
 
 def generateJson():
     return
 
-def labelPropagate(nodesorder):
 
+def stopPropagate(nodesOrder):
+    for i in range(len(nodesOrder)):
+        # checkResult(nodesOrder[i][0])
+        neighbors = findNeighbours(nodesOrder[i][0])
+        neig_lbls = getNeighboursLabels(neighbors, nodesOrder)
+        nodelbl = getNodeLabel(neig_lbls)
+        if checkHasMaximumLabel(neig_lbls, nodelbl) == True:
+            return True
+    return False
+
+
+def labelPropagate(nodesorder):
     while (1):
         stopCount = 0
         for i in range(len(nodesorder)):
+            # checkResult(nodesorder[i][0])
             neighbors = findNeighbours(nodesorder[i][0])
             neig_lbls = getNeighboursLabels(neighbors, nodesorder)
             nodelbl = getNodeLabel(neig_lbls)
-            if checkHasMaximumLabel(neighbors, neig_lbls, nodelbl) == True:
-                stopCount += 1
 
-            if nodelbl != -1:
-                nodesorder[i][1].append(nodelbl)
-            else:
-                nodesorder[i][1].append(nodesorder[i][1][-1])
+            # if nodelbl != -1:
+            nodesorder[i][1].append(nodelbl)
+            # else:
+            #     nodesorder[i][1].append(nodesorder[i][1][-1])
             print(nodesorder[i])
-        if stopCount == len(nodesorder):
-            break
-        if stopCount>0:
+        # if stopCount == len(nodesorder):
+        #     break
+        # if stopCount > 0:
+        #     break
+        if stopPropagate(nodesorder) == True:
             break
         print(nodesorder)
         shuffle(nodesorder)
