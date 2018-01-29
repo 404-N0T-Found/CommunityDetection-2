@@ -56,7 +56,7 @@ def getNeighboursLabels(lstNei, nodesLabels):
 
 def checkHasMaximumLabel(neig, lbls, nodelbl):
     cnt = lbls.count(nodelbl)
-    if (cnt > (len(neig) / 2)):
+    if (cnt+1 > len(lbls)-cnt-1):
         return True
     return False
 
@@ -75,6 +75,8 @@ def getNodeLabel(labels):
         rnd = randint(0, len(labels) - 1)
         return labels[rnd]
 
+def generateJson():
+    return
 
 def labelPropagate(nodesorder):
 
@@ -93,6 +95,8 @@ def labelPropagate(nodesorder):
                 nodesorder[i][1].append(nodesorder[i][1][-1])
             print(nodesorder[i])
         if stopCount == len(nodesorder):
+            break
+        if stopCount>0:
             break
         print(nodesorder)
         shuffle(nodesorder)
