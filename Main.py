@@ -36,7 +36,6 @@ def getNodeLabel(labels):
 
 
 def checkCondition(labels, nodelbl):
-
     lbl = max(labels, key=labels.count)
     return labels.count(lbl) == labels.count(nodelbl)
 
@@ -49,8 +48,23 @@ def checkStopCondition():
         if result == False:
             return False
     return True
+
+
 def generateJson():
     return 1
+
+
+def displayComm():
+    lstlbl = []
+    for item in graph:
+        lstlbl.append(graph[item]["label"])
+    mycomm = set(lstlbl)
+    memcnt = [lstlbl.count(i) for i in mycomm]
+    mycomm=list(mycomm)
+    print("Communities count is " + str(len(mycomm)))
+    for i in range(len(mycomm)):
+        print("Community "+ str(mycomm[i])+" has a "+str(memcnt[i])+"member!")
+
 
 def labelPropagate():
     keys = list(graph.keys())
@@ -61,7 +75,8 @@ def labelPropagate():
             graph[key]['label'] = getNodeLabel(NeigbLabels)
         if checkStopCondition():
             break
-    generateJson()
+    displayComm()
+
 
 if __name__ == '__main__':
     graph = initial()
